@@ -1,4 +1,7 @@
-'use strict';
+'use strict'; // почему тут обычные кавычки ?
+
+const mainElement = document.querySelector(`main`);
+const headerElement = mainElement.querySelector(`.main__control`);
 
 const createSiteMenuTemplate = () => { // зачем () ?
   return (
@@ -36,3 +39,5 @@ const createSiteMenuTemplate = () => { // зачем () ?
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
+
+render(headerElement, createSiteMenuTemplate(), `beforeend`);
