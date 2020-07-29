@@ -108,6 +108,16 @@ const createBoardTemplate = () => {
   );
 };
 
+const createSortingTemplate = () => {
+  return (
+    `<div class="board__filter-list">
+    <a href="#" class="board__filter">SORT BY DEFAULT</a>
+    <a href="#" class="board__filter">SORT BY DATE up</a>
+    <a href="#" class="board__filter">SORT BY DATE down</a>
+    </div>`
+  );
+};
+
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
@@ -115,3 +125,7 @@ const render = (container, template, place) => {
 render(headerElement, createSiteMenuTemplate(), `beforeend`);
 render(mainElement, createFilterTemplate(), `beforeend`);
 render(mainElement, createBoardTemplate(), `beforeend`);
+
+const boardElement = mainElement.querySelector(`.board`);
+
+render(boardElement, createSortingTemplate(), `afterbegin`);
