@@ -32,3 +32,7 @@ const createSiteMenuTemplate = () => { // зачем () ?
     </section>`
   );
 };
+
+const render = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
+};
