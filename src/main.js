@@ -1,9 +1,11 @@
 'use strict'; // почему тут обычные кавычки ?
 
+const TASK_COUNT = 3;
+
 const mainElement = document.querySelector(`main`);
 const headerElement = mainElement.querySelector(`.main__control`);
 
-const createSiteMenuTemplate = () => { // зачем () ?
+const createSiteMenuTemplate = () => {
   return (
     `<section class="control__btn-wrap">
     <input
@@ -319,6 +321,59 @@ const createTaskEditTemplate = () => {
   );
 };
 
+const createTaskTemplate = () => {
+  return (
+    `<article class="card card--black">
+      <div class="card__form">
+        <div class="card__inner">
+          <div class="card__control">
+            <button type="button" class="card__btn card__btn--edit">
+              edit
+            </button>
+            <button type="button" class="card__btn card__btn--archive">
+              archive
+            </button>
+            <button
+              type="button"
+              class="card__btn card__btn--favorites"
+            >
+              favorites
+            </button>
+          </div>
+
+          <div class="card__color-bar">
+            <svg class="card__color-bar-wave" width="100%" height="10">
+              <use xlink:href="#wave"></use>
+            </svg>
+          </div>
+
+          <div class="card__textarea-wrap">
+            <p class="card__text">Example task with default color.</p>
+          </div>
+
+          <div class="card__settings">
+            <div class="card__details">
+              <div class="card__dates">
+                <div class="card__date-deadline">
+                  <p class="card__input-deadline-wrap">
+                    <span class="card__date">23 September</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>`
+  );
+};
+
+const createLoadMoreButtonTemplate = () => {
+  return (
+    `<button class="load-more" type="button">load more</button>`
+  );
+};
+
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
@@ -328,9 +383,13 @@ render(mainElement, createFilterTemplate(), `beforeend`);
 render(mainElement, createBoardTemplate(), `beforeend`);
 
 const boardElement = mainElement.querySelector(`.board`);
+const boardTasksElement = boardElement.querySelector(`.board__tasks`);
 
 render(boardElement, createSortingTemplate(), `afterbegin`);
+render(boardTasksElement, createTaskEditTemplate(), `beforeend`);
 
-const boardTasksElement = boardElement.querySelector(`.board__tasks`);
-render(boardTasksElement, createTaskEditTemplate(), `beforebegin`);
+for (let i = 0; i < TASK_COUNT; i++) {
+  render(boardTasksElement, createTaskTemplate(), `beforeend`);
+}
 
+render(boardElement, createLoadMoreButtonTemplate(), `beforeend`);
