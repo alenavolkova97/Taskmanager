@@ -1,5 +1,3 @@
-'use strict'; // почему тут обычные кавычки ?
-
 const TASK_COUNT = 3;
 
 const mainElement = document.querySelector(`main`);
