@@ -42,6 +42,13 @@ const generateRepeating = () => {
   };
 };
 
+const generateColor = () => {
+  const colors = [`black`, `yellow`, `blue`, `green`, `pink`];
+
+  const randomIndex = getRandomInteger(0, descriptions.length - 1);
+  return colors[randomIndex];
+};
+
 const generateTask = () => {
   const dueDate = generateDate();
   const repeating = (dueDate === null) ? generateRepeating()
@@ -56,7 +63,10 @@ const generateTask = () => {
     };
   return {
     description: generateDescription(),
-    DueDate,
-    repeating
+    dueDate,
+    repeating,
+    color: generateColor(),
+    isArchive: Boolean(getRandomInteger(0, 1)),
+    isFavorite: Boolean(getRandomInteger(0, 1)),
   };
 };
