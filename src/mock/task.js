@@ -20,8 +20,8 @@ const generateDate = () => {
     return null;
   }
 
-  const maxDaysGap = 7; // не должно быть прописными буквами?
-  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
+  const MAX_DAYS_GAP = 7;
+  const daysGap = getRandomInteger(-MAX_DAYS_GAP, MAX_DAYS_GAP);
   const currentDate = new Date();
 
   currentDate.setHours(23, 59, 59, 999);

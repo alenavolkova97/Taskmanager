@@ -11,7 +11,7 @@ const isExpired = (dueDate) => {
 };
 
 const isRepeating = (repeating) => {
-  return Object.values(repeating).some(Boolean); // ?
+  return Object.values(repeating).some((repeat) => repeat);
 };
 
 export const createTaskTemplate = (task) => {
@@ -26,11 +26,11 @@ export const createTaskTemplate = (task) => {
   const repeatClassName = isRepeating(repeating)
     ? `card--repeat` : ``;
 
-  const archiveClassName = isArchive // ?
+  const archiveClassName = isArchive
     ? `card__btn--disabled`
     : ``;
 
-  const favoriteClassName = isFavorite // ?
+  const favoriteClassName = isFavorite
     ? `card__btn--disabled`
     : ``;
 
