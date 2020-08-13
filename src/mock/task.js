@@ -9,6 +9,7 @@ const generateDescription = () => {
   const descriptions = [`Изучить теорию`, `Сделать домашку`, `Пройти интенсив на соточку`];
 
   const randomIndex = getRandomInteger(0, descriptions.length - 1);
+
   return descriptions[randomIndex];
 };
 
@@ -22,7 +23,6 @@ const generateDate = () => {
   const maxDaysGap = 7; // не должно быть прописными буквами?
   const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
   const currentDate = new Date();
-  console.log(new Date()); // ?
 
   currentDate.setHours(23, 59, 59, 999);
   currentDate.setDate(currentDate.getDate() + daysGap);
@@ -45,11 +45,12 @@ const generateRepeating = () => {
 const generateColor = () => {
   const colors = [`black`, `yellow`, `blue`, `green`, `pink`];
 
-  const randomIndex = getRandomInteger(0, descriptions.length - 1);
+  const randomIndex = getRandomInteger(0, colors.length - 1);
+
   return colors[randomIndex];
 };
 
-const generateTask = () => {
+export const generateTask = () => {
   const dueDate = generateDate();
   const repeating = (dueDate === null) ? generateRepeating()
     : {
@@ -61,6 +62,7 @@ const generateTask = () => {
       sa: false,
       su: false
     };
+
   return {
     description: generateDescription(),
     dueDate,
