@@ -1,5 +1,33 @@
+const isExpired = (dueDate) => {
+  if (dueDate === null) {
+    return false;
+  }
+
+  let currentDate = new Date();
+  currentDate.setHours(23, 59, 59, 999);
+
+  return currentDate.getTime() > dueDate.getTime();
+};
+
 const isRepeating = (repeating) => {
   return Object.values(repeating).some((repeat) => repeat);
+};
+
+const createTaskEditDateTemplate = (dueDate) => {
+  return `<button class="card__date-deadline-toggle" type="button">
+    date: <span class="card__date-status">${(dueDate !== null) ? `yes` : `no`}</span>
+  </button>
+
+  ${(dueDate !== null) ? `<fieldset class="card__date-deadline">
+    <label class="card__input-deadline-wrap">
+      <input
+        class="card__date"
+        type="text"
+        placeholder="${dueDate.toLocaleString(`en-US`, {day: `numeric`, month: `long`})}"
+        name="date"
+      />
+    </label>
+  </fieldset>` : ``}`;
 };
 
 const createTaskEditRepeatingTemplate = (repeating) => {
@@ -7,7 +35,7 @@ const createTaskEditRepeatingTemplate = (repeating) => {
     repeat:<span class="card__repeat-status">${isRepeating(repeating) ? `yes` : `no`}</span>
   </button>
 
-  ${isRepeating(repeating) ? `<fieldset class="card__repeat-days" disabled>
+  ${isRepeating(repeating) ? `<fieldset class="card__repeat-days">
     <div class="card__repeat-days-inner">
       ${Object.entries(repeating).map(([day, repeat]) =>`<input
         class="visually-hidden card__repeat-day-input"
@@ -40,10 +68,17 @@ export const createTaskEditTemplate = (task = {}) => {
     color = `black`
   } = task;
 
+  const deadlineClassName = isExpired(dueDate)
+    ? `card--deadline` : ``;
+
+  const repeatClassName = isRepeating(repeating)
+    ? `card--repeat` : ``;
+
+  const dateTemplate = createTaskEditDateTemplate(dueDate);
   const repeatingTemplate = createTaskEditRepeatingTemplate(repeating);
 
   return (
-    `<article class="card card--edit card--black">
+    `<article class="card card--edit card--${color} ${deadlineClassName} ${repeatClassName}">
       <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__color-bar">
@@ -65,21 +100,7 @@ export const createTaskEditTemplate = (task = {}) => {
           <div class="card__settings">
             <div class="card__details">
               <div class="card__dates">
-                <button class="card__date-deadline-toggle" type="button">
-                  date: <span class="card__date-status">no</span>
-                </button>
-
-                <fieldset class="card__date-deadline" disabled>
-                  <label class="card__input-deadline-wrap">
-                    <input
-                      class="card__date"
-                      type="text"
-                      placeholder="23 September"
-                      name="date"
-                    />
-                  </label>
-                </fieldset>
-
+                ${dateTemplate}
                 ${repeatingTemplate}
               </div>
             </div>
