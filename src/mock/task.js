@@ -27,7 +27,7 @@ const generateDate = () => {
   currentDate.setHours(23, 59, 59, 999);
   currentDate.setDate(currentDate.getDate() + daysGap);
 
-  return new Date(currentDate);
+  return currentDate;
 };
 
 const generateRepeating = () => {
@@ -52,13 +52,14 @@ const generateColor = () => {
 
 export const generateTask = () => {
   const dueDate = generateDate();
-  const repeating = (dueDate === null) ? generateRepeating()
+  const repeating = (dueDate === null)
+    ? generateRepeating()
     : {
       mo: false,
       tu: false,
-      we: Boolean(getRandomInteger(0, 1)),
+      we: false,
       th: false,
-      fr: Boolean(getRandomInteger(0, 1)),
+      fr: false,
       sa: false,
       su: false
     };
