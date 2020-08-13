@@ -26,6 +26,14 @@ export const createTaskTemplate = (task) => {
   const repeatClassName = isRepeating(repeating)
     ? `card--repeat` : ``;
 
+  const archiveClassName = isArchive // ?
+    ? `card__btn--disabled`
+    : ``;
+
+  const favoriteClassName = isFavorite // ?
+    ? `card__btn--disabled`
+    : ``;
+
   return (
     `<article class="card card--${color} ${deadlineClassName} ${repeatClassName}">
       <div class="card__form">
@@ -34,12 +42,12 @@ export const createTaskTemplate = (task) => {
             <button type="button" class="card__btn card__btn--edit">
               edit
             </button>
-            <button type="button" class="card__btn card__btn--archive">
+            <button type="button" class="card__btn card__btn--archive ${archiveClassName}">
               archive
             </button>
             <button
               type="button"
-              class="card__btn card__btn--favorites"
+              class="card__btn card__btn--favorites ${favoriteClassName}"
             >
               favorites
             </button>
