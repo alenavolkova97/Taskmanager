@@ -52,6 +52,24 @@ const createTaskEditRepeatingTemplate = (repeating) => {
   </fieldset>` : ``}`;
 };
 
+const createTaskEditColorsTemplate = (currentColor) => {
+  const colors = [`black`, `yellow`, `blue`, `green`, `pink`];
+
+  return colors.map((color) => `<input
+  type="radio"
+  id="color-${color}-1"
+  class="card__color-input card__color-input--${color} visually-hidden"
+  name="color"
+  value="${color}"
+  ${currentColor === color ? `checked` : ``}
+  />
+  <label
+    for="color-${color}-1"
+    class="card__color card__color--${color}"
+    >black</label
+  >`).join(``);
+};
+
 export const createTaskEditTemplate = (task = {}) => {
   const {
     description = ``,
@@ -74,6 +92,7 @@ export const createTaskEditTemplate = (task = {}) => {
   const repeatClassName = isRepeating(repeating)
     ? `card--repeat` : ``;
 
+  const colorsTemplate = createTaskEditColorsTemplate(color);
   const dateTemplate = createTaskEditDateTemplate(dueDate);
   const repeatingTemplate = createTaskEditRepeatingTemplate(repeating);
 
@@ -108,67 +127,7 @@ export const createTaskEditTemplate = (task = {}) => {
             <div class="card__colors-inner">
               <h3 class="card__colors-title">Color</h3>
               <div class="card__colors-wrap">
-                <input
-                  type="radio"
-                  id="color-black-1"
-                  class="card__color-input card__color-input--black visually-hidden"
-                  name="color"
-                  value="black"
-                  checked
-                />
-                <label
-                  for="color-black-1"
-                  class="card__color card__color--black"
-                  >black</label
-                >
-                <input
-                  type="radio"
-                  id="color-yellow-1"
-                  class="card__color-input card__color-input--yellow visually-hidden"
-                  name="color"
-                  value="yellow"
-                />
-                <label
-                  for="color-yellow-1"
-                  class="card__color card__color--yellow"
-                  >yellow</label
-                >
-                <input
-                  type="radio"
-                  id="color-blue-1"
-                  class="card__color-input card__color-input--blue visually-hidden"
-                  name="color"
-                  value="blue"
-                />
-                <label
-                  for="color-blue-1"
-                  class="card__color card__color--blue"
-                  >blue</label
-                >
-                <input
-                  type="radio"
-                  id="color-green-1"
-                  class="card__color-input card__color-input--green visually-hidden"
-                  name="color"
-                  value="green"
-                />
-                <label
-                  for="color-green-1"
-                  class="card__color card__color--green"
-                  >green</label
-                >
-                <input
-                  type="radio"
-                  id="color-pink-1"
-                  class="card__color-input card__color-input--pink visually-hidden"
-                  name="color"
-                  value="pink"
-                />
-                <label
-                  for="color-pink-1"
-                  class="card__color card__color--pink"
-                  >pink</label
-                >
+                ${colorsTemplate}
               </div>
             </div>
           </div>
