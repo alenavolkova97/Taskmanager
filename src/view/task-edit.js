@@ -1,3 +1,5 @@
+import {COLORS} from '../const.js';
+
 const isExpired = (dueDate) => {
   if (dueDate === null) {
     return false;
@@ -30,7 +32,7 @@ const createTaskEditDateTemplate = (dueDate) => {
   </fieldset>` : ``}`;
 };
 
-const createTaskEditRepeatingTemplate = (repeating) => {
+const createTaskEditRepeatingTemplate = (repeating) => { // проблема
   return `<button class="card__repeat-toggle" type="button">
     repeat:<span class="card__repeat-status">${isRepeating(repeating) ? `yes` : `no`}</span>
   </button>
@@ -53,9 +55,7 @@ const createTaskEditRepeatingTemplate = (repeating) => {
 };
 
 const createTaskEditColorsTemplate = (currentColor) => {
-  const colors = [`black`, `yellow`, `blue`, `green`, `pink`];
-
-  return colors.map((color) => `<input
+  return COLORS.map((color) => `<input
   type="radio"
   id="color-${color}-1"
   class="card__color-input card__color-input--${color} visually-hidden"
@@ -66,7 +66,7 @@ const createTaskEditColorsTemplate = (currentColor) => {
   <label
     for="color-${color}-1"
     class="card__color card__color--${color}"
-    >black</label
+    >${color}</label
   >`).join(``);
 };
 
