@@ -1,19 +1,5 @@
 import {COLORS} from '../const.js';
-
-const isExpired = (dueDate) => {
-  if (dueDate === null) {
-    return false;
-  }
-
-  let currentDate = new Date();
-  currentDate.setHours(23, 59, 59, 999);
-
-  return currentDate.getTime() > dueDate.getTime();
-};
-
-const isRepeating = (repeating) => {
-  return Object.values(repeating).some((repeat) => repeat);
-};
+import {isTaskExpired, isTaskRepeating, humanizeTaskDueDate} from '../utils.js';
 
 const createTaskEditDateTemplate = (dueDate) => {
   return `<button class="card__date-deadline-toggle" type="button">
@@ -25,7 +11,7 @@ const createTaskEditDateTemplate = (dueDate) => {
       <input
         class="card__date"
         type="text"
-        placeholder="${dueDate.toLocaleString(`en-US`, {day: `numeric`, month: `long`})}"
+        placeholder="${humanizeTaskDueDate(dueDate)}"
         name="date"
       />
     </label>
@@ -34,10 +20,10 @@ const createTaskEditDateTemplate = (dueDate) => {
 
 const createTaskEditRepeatingTemplate = (repeating) => { // проблема
   return `<button class="card__repeat-toggle" type="button">
-    repeat:<span class="card__repeat-status">${isRepeating(repeating) ? `yes` : `no`}</span>
+    repeat:<span class="card__repeat-status">${isTaskRepeating(repeating) ? `yes` : `no`}</span>
   </button>
 
-  ${isRepeating(repeating) ? `<fieldset class="card__repeat-days">
+  ${isTaskRepeating(repeating) ? `<fieldset class="card__repeat-days">
     <div class="card__repeat-days-inner">
       ${Object.entries(repeating).map(([day, repeat]) =>`<input
         class="visually-hidden card__repeat-day-input"
@@ -86,10 +72,10 @@ export const createTaskEditTemplate = (task = {}) => {
     color = `black`
   } = task;
 
-  const deadlineClassName = isExpired(dueDate)
+  const deadlineClassName = isTaskExpired(dueDate)
     ? `card--deadline` : ``;
 
-  const repeatClassName = isRepeating(repeating)
+  const repeatClassName = isTaskRepeating(repeating)
     ? `card--repeat` : ``;
 
   const colorsTemplate = createTaskEditColorsTemplate(color);
