@@ -6,6 +6,8 @@ import {createTaskEditTemplate} from './view/task-edit.js';
 import {createTaskTemplate} from './view/task.js';
 import {createLoadMoreButtonTemplate} from './view/load-more-button.js';
 import {generateTask} from './mock/task.js';
+import {generateFilter} from "./mock/filter.js";
+
 
 const TASK_COUNT = 12;
 
@@ -13,13 +15,14 @@ const mainElement = document.querySelector(`main`);
 const headerElement = mainElement.querySelector(`.main__control`);
 
 const tasks = new Array(TASK_COUNT).fill().map(generateTask);
+const filters = generateFilter(tasks);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
 render(headerElement, createSiteMenuTemplate(), `beforeend`);
-render(mainElement, createFilterTemplate(), `beforeend`);
+render(mainElement, createFilterTemplate(filters), `beforeend`);
 render(mainElement, createBoardTemplate(), `beforeend`);
 
 const boardElement = mainElement.querySelector(`.board`);
