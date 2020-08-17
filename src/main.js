@@ -8,8 +8,7 @@ import {createLoadMoreButtonTemplate} from './view/load-more-button.js';
 import {generateTask} from './mock/task.js';
 import {generateFilter} from "./mock/filter.js";
 
-
-const TASK_COUNT = 12;
+const TASK_COUNT = 8;
 
 const mainElement = document.querySelector(`main`);
 const headerElement = mainElement.querySelector(`.main__control`);
