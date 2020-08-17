@@ -11,8 +11,9 @@ const createTaskEditDateTemplate = (dueDate) => {
       <input
         class="card__date"
         type="text"
-        placeholder="${humanizeTaskDueDate(dueDate)}"
+        placeholder=""
         name="date"
+        value="${humanizeTaskDueDate(dueDate)}"
       />
     </label>
   </fieldset>` : ``}`;
@@ -42,15 +43,15 @@ const createTaskEditRepeatingTemplate = (repeating) => { // проблема
 
 const createTaskEditColorsTemplate = (currentColor) => {
   return COLORS.map((color) => `<input
-  type="radio"
-  id="color-${color}-1"
-  class="card__color-input card__color-input--${color} visually-hidden"
-  name="color"
-  value="${color}"
-  ${currentColor === color ? `checked` : ``}
+    type="radio"
+    id="color-${color}"
+    class="card__color-input card__color-input--${color} visually-hidden"
+    name="color"
+    value="${color}"
+    ${currentColor === color ? `checked` : ``}
   />
   <label
-    for="color-${color}-1"
+    for="color-${color}"
     class="card__color card__color--${color}"
     >${color}</label
   >`).join(``);
@@ -87,7 +88,7 @@ export const createTaskEditTemplate = (task = {}) => {
       <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__color-bar">
-            <svg width="100%" height="10">
+            <svg class="card__color-bar-wave" width="100%" height="10">
               <use xlink:href="#wave"></use>
             </svg>
           </div>
