@@ -1,5 +1,5 @@
 import SiteMenuView from './view/site-menu.js';
-import {createFilterTemplate} from './view/filter.js';
+import FilterView from './view/filter.js';
 import BoardView from './view/board.js';
 import SortingView from './view/sorting.js';
 import TaskListView from './view/task-list.js';
@@ -20,7 +20,7 @@ const tasks = new Array(TASK_COUNT).fill().map(generateTask);
 const filters = generateFilter(tasks);
 
 renderElement(headerElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
-renderTemplate(mainElement, createFilterTemplate(filters), `beforeend`);
+renderElement(mainElement, new FilterView(filters).getElement(), RenderPosition.BEFOREEND);
 
 const boardComponent = new BoardView();
 const TaskListComponent = new TaskListView();
