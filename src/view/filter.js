@@ -1,3 +1,5 @@
+import {createElement} from '../utils.js';
+
 const createFilterItemTemplate = (filter, isChecked) => {
   const {name, count} = filter;
 
@@ -16,9 +18,9 @@ const createFilterItemTemplate = (filter, isChecked) => {
   );
 };
 
-export const createFilterTemplate = (filterItems) => {
+const createFilterTemplate = (filterItems) => {
   const filterItemsTemplate = filterItems
-    .map((filter, index) => createFilterItemTemplate(filter, index === 0)) // index === 0 превращается в булево ?
+    .map((filter, index) => createFilterItemTemplate(filter, index === 0))
     .join(``);
 
   return `<section class="main__filter filter container">
@@ -26,4 +28,25 @@ export const createFilterTemplate = (filterItems) => {
   </section>`;
 };
 
-// 2 фильтра скрыты под карточкой редактирования
+export default class Filter {
+  constructor(filters) {
+    this._element = null;
+    this._filters = filters;
+  }
+
+  _getTemplate() {
+    return createFilterTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this._getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() { // ?
+    this._element = null;
+  }
+}
