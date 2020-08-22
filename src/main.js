@@ -21,7 +21,7 @@ const filters = generateFilter(tasks);
 
 const renderTask = (taskListElement, task) => {
   const taskComponent = new TaskView(task);
-  const taskEditComponent = new TaskEditView(task);
+  let taskEditComponent;
 
   const replaceCardToForm = () => {
     taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
@@ -32,13 +32,18 @@ const renderTask = (taskListElement, task) => {
   };
 
   taskComponent.getElement().querySelector(`.card__btn--edit`).addEventListener(`click`, () => {
+    if (!taskEditComponent) {
+      taskEditComponent = new TaskEditView(task); // create component when click happen
+    }
     replaceCardToForm();
   });
 
-  taskEditComponent.getElement().querySelector(`.card__form`).addEventListener(`submit`, (evt) => {
-    evt.preventDefault();
-    replaceFormToCard();
-  });
+  if (taskEditComponent) {
+    taskEditComponent.getElement().querySelector(`.card__form`).addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
+      replaceFormToCard();
+    });
+  }
 
   render(taskListElement, taskComponent.getElement());
 };
