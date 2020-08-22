@@ -150,7 +150,7 @@ export default class TaskEdit {
     return this._element;
   }
 
-  removeElement() { // ?
+  removeElement() {
     this._element = null;
   }
 }
