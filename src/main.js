@@ -3,8 +3,8 @@ import FilterView from './view/filter.js';
 import BoardView from './view/board.js';
 import SortingView from './view/sorting.js';
 import TaskListView from './view/task-list.js';
-import {createTaskEditTemplate} from './view/task-edit.js';
-import {createTaskTemplate} from './view/task.js';
+import TaskEditView from './view/task-edit.js';
+import TaskView from './view/task.js';
 import LoadMoreButtonView from './view/load-more-button.js';
 import {generateTask} from './mock/task.js';
 import {generateFilter} from "./mock/filter.js";
@@ -29,10 +29,10 @@ renderElement(mainElement, boardComponent.getElement(), RenderPosition.BEFOREEND
 renderElement(boardComponent.getElement(), new SortingView().getElement(), RenderPosition.BEFOREEND);
 renderElement(boardComponent.getElement(), TaskListComponent.getElement(), RenderPosition.BEFOREEND);
 
-renderTemplate(TaskListComponent.getElement(), createTaskEditTemplate(tasks[0]), `beforeend`);
+renderElement(TaskListComponent.getElement(), new TaskEditView(tasks[0]).getElement(), RenderPosition.BEFOREEND);
 
 for (let i = 1; i < Math.min(tasks.length, TASK_COUNT_PER_STEP); i++) {
-  renderTemplate(TaskListComponent.getElement(), createTaskTemplate(tasks[i]), `beforeend`);
+  renderElement(TaskListComponent.getElement(), new TaskView(tasks[i]).getElement(), RenderPosition.BEFOREEND);
 }
 
 if (tasks.length > TASK_COUNT_PER_STEP) {
@@ -45,7 +45,7 @@ if (tasks.length > TASK_COUNT_PER_STEP) {
   LoadMoreButtonComponent.getElement().addEventListener(`click`, () => {
     tasks
       .slice(renderedTaskCount, renderedTaskCount + TASK_COUNT_PER_STEP)
-      .forEach((task) => renderTemplate(TaskListComponent.getElement(), createTaskTemplate(task), `beforeend`));
+      .forEach((task) => renderElement(TaskListComponent.getElement(), new TaskView(task).getElement(), RenderPosition.BEFOREEND));
 
     renderedTaskCount += TASK_COUNT_PER_STEP;
 
