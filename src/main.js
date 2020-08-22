@@ -36,14 +36,12 @@ const renderTask = (taskListElement, task) => {
       taskEditComponent = new TaskEditView(task); // create component when click happen
     }
     replaceCardToForm();
-  });
 
-  if (taskEditComponent) {
     taskEditComponent.getElement().querySelector(`.card__form`).addEventListener(`submit`, (evt) => {
       evt.preventDefault();
       replaceFormToCard();
     });
-  }
+  });
 
   render(taskListElement, taskComponent.getElement());
 };
