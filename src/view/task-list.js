@@ -2,7 +2,8 @@ import {createElement} from '../utils.js';
 
 const createTaskListTemplate = () => {
   return (
-    `<div class="board__tasks">`
+    `<div class="board__tasks">
+    <div>`
   );
 };
 
