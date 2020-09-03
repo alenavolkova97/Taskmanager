@@ -6,6 +6,7 @@ import TaskListView from './view/task-list.js';
 import TaskEditView from './view/task-edit.js';
 import TaskView from './view/task.js';
 import LoadMoreButtonView from './view/load-more-button.js';
+import NoTasksView from './view/no-tasks.js';
 import {generateTask} from './mock/task.js';
 import {generateFilter} from "./mock/filter.js";
 import {render} from "./utils.js";
@@ -62,7 +63,13 @@ const boardComponent = new BoardView();
 const TaskListComponent = new TaskListView();
 
 render(mainElement, boardComponent.getElement());
-render(boardComponent.getElement(), new SortingView().getElement());
+
+if (tasks.every((task) => task.isArchive)) {
+  render(boardComponent.getElement(), new NoTasksView().getElement());
+} else {
+  render(boardComponent.getElement(), new SortingView().getElement());
+}
+
 render(boardComponent.getElement(), TaskListComponent.getElement());
 
 for (let i = 0; i < Math.min(tasks.length, TASK_COUNT_PER_STEP); i++) {
