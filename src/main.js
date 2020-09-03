@@ -31,11 +31,20 @@ const renderTask = (taskListElement, task) => {
     taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
   };
 
+  const onEscPress = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      replaceFormToCard();
+      document.removeEventListener(`keydown`, onEscPress);
+    }
+  };
+
   taskComponent.getElement().querySelector(`.card__btn--edit`).addEventListener(`click`, () => {
     if (!taskEditComponent) {
       taskEditComponent = new TaskEditView(task); // create component when click happen
     }
     replaceCardToForm();
+    document.addEventListener(`keydown`, onEscPress);
 
     taskEditComponent.getElement().querySelector(`.card__form`).addEventListener(`submit`, (evt) => {
       evt.preventDefault();
