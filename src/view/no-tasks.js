@@ -1,14 +1,15 @@
 import {createElement} from '../utils.js';
 
-export default class TaskList {
+export default class NoTasks {
   constructor() {
     this._element = null;
   }
 
   _getTemplate() {
     return (
-      `<div class="board__tasks">
-      <div>`
+      `<p class="board__no-tasks">
+        Click «ADD NEW TASK» in menu to create your first task
+      </p>`
     );
   }
 
