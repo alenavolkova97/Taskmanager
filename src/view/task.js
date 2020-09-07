@@ -7,7 +7,7 @@ export default class Task {
     this._task = task;
   }
 
-  _getTemplate() {
+  getTemplate() {
     const {description, color, dueDate, repeating, isArchive, isFavorite} = this._task;
 
     return (
@@ -62,7 +62,7 @@ export default class Task {
 
   getElement() {
     if (!this._element) {
-      this._element = createElement(this._getTemplate());
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

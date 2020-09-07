@@ -5,7 +5,7 @@ export default class NoTasks {
     this._element = null;
   }
 
-  _getTemplate() {
+  getTemplate() {
     return (
       `<p class="board__no-tasks">
         Click «ADD NEW TASK» in menu to create your first task
@@ -15,7 +15,7 @@ export default class NoTasks {
 
   getElement() {
     if (!this._element) {
-      this._element = createElement(this._getTemplate());
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

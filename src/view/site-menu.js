@@ -5,7 +5,7 @@ export default class SiteMenu {
     this._element = null;
   }
 
-  _getTemplate() {
+  getTemplate() {
     return (
       `<section class="control__btn-wrap">
       <input
@@ -40,7 +40,7 @@ export default class SiteMenu {
 
   getElement() {
     if (!this._element) {
-      this._element = createElement(this._getTemplate());
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

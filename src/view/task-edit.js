@@ -79,7 +79,7 @@ export default class TaskEdit {
     >`).join(``);
   }
 
-  _getTemplate() {
+  getTemplate() {
     const {description, dueDate, repeating, color} = this._task;
 
     return (
@@ -131,7 +131,7 @@ export default class TaskEdit {
 
   getElement() {
     if (!this._element) {
-      this._element = createElement(this._getTemplate());
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

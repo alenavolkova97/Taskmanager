@@ -24,7 +24,7 @@ export default class Filter {
     );
   }
 
-  _getTemplate() {
+  getTemplate() {
     return (
       `<section class="main__filter filter container">
         ${this._filters
@@ -36,7 +36,7 @@ export default class Filter {
 
   getElement() {
     if (!this._element) {
-      this._element = createElement(this._getTemplate());
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;
