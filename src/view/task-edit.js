@@ -1,6 +1,6 @@
 import {COLORS} from '../const.js';
 import {isTaskExpired, isTaskRepeating, humanizeTaskDueDate} from '../utils.js';
-import {createElement} from '../utils.js';
+import AbstractView from './abstract.js';
 
 const BLANK_TASK = {
   description: ``,
@@ -17,9 +17,9 @@ const BLANK_TASK = {
   color: COLORS[0]
 };
 
-export default class TaskEdit {
+export default class TaskEdit extends AbstractView {
   constructor(task = BLANK_TASK) {
-    this._element = null;
+    super();
     this._task = task;
   }
 
@@ -127,17 +127,5 @@ export default class TaskEdit {
         </form>
       </article>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
