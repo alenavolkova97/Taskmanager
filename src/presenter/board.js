@@ -9,18 +9,22 @@ import {render, RenderPosition, replace, remove} from "../utils/render.js";
 
 const TASK_COUNT_PER_STEP = 8;
 
-export default class Board {
+export default class Board { // create components, add components into page, add event listeners
   constructor(boardContainer) {
     this._boardContainer = boardContainer;
+    this._renderedTaskCount = TASK_COUNT_PER_STEP;
 
     this._boardComponent = new BoardView();
     this._taskListComponent = new TaskListView();
     this._noTasksComponent = new NoTasksView();
     this._sortingComponent = new SortingView();
+    this._loadMoreButtonComponent = new LoadMoreButtonView();
+
+    this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
   }
 
   init(boardTasks) {
-    this._boardTasks = boardTasks.slice(); // ?
+    this._boardTasks = boardTasks; // slice не нужен?
 
     render(this._boardContainer, this._boardComponent);
     render(this._boardComponent, this._taskListComponent);
@@ -84,24 +88,19 @@ export default class Board {
     render(this._boardComponent, this._sortingComponent, RenderPosition.AFTERBEGIN);
   }
 
+  _handleLoadMoreButtonClick() {
+    this._renderTasks(this._renderedTaskCount, this._renderedTaskCount + TASK_COUNT_PER_STEP);
+    this._renderedTaskCount += TASK_COUNT_PER_STEP;
+
+    if (this._renderedTaskCount >= this._boardTasks.length) {
+      remove(this._loadMoreButtonComponent);
+    }
+  }
+
   _renderLoadMoreButton() {
-    let renderedTaskCount = TASK_COUNT_PER_STEP;
+    render(this._boardComponent, this._loadMoreButtonComponent);
 
-    const LoadMoreButtonComponent = new LoadMoreButtonView();
-
-    render(this._boardComponent, LoadMoreButtonComponent);
-
-    LoadMoreButtonComponent.setClickHandler(() => {
-      this._boardTasks
-        .slice(renderedTaskCount, renderedTaskCount + TASK_COUNT_PER_STEP)
-        .forEach((boardTask) => this._renderTask(boardTask));
-
-      renderedTaskCount += TASK_COUNT_PER_STEP;
-
-      if (renderedTaskCount >= this._boardTasks.length) {
-        remove(LoadMoreButtonComponent);
-      }
-    });
+    this._loadMoreButtonComponent.setClickHandler(this._handleLoadMoreButtonClick);
   }
 
   _renderBoard() {
