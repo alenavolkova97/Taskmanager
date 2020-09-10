@@ -20,78 +20,78 @@ const headerElement = mainElement.querySelector(`.main__control`);
 const tasks = new Array(TASK_COUNT).fill().map(generateTask);
 const filters = generateFilter(tasks);
 
-const renderTask = (taskListElement, task) => {
-  const taskComponent = new TaskView(task);
-  let taskEditComponent;
+// const renderTask = (taskListElement, task) => {
+//   const taskComponent = new TaskView(task);
+//   let taskEditComponent;
 
-  const replaceCardToForm = () => {
-    replace(taskEditComponent, taskComponent);
-  };
+//   const replaceCardToForm = () => {
+//     replace(taskEditComponent, taskComponent);
+//   };
 
-  const replaceFormToCard = () => {
-    replace(taskComponent, taskEditComponent);
-  };
+//   const replaceFormToCard = () => {
+//     replace(taskComponent, taskEditComponent);
+//   };
 
-  const onEscPress = (evt) => {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
-      replaceFormToCard();
-      document.removeEventListener(`keydown`, onEscPress);
-    }
-  };
+//   const onEscPress = (evt) => {
+//     if (evt.key === `Escape` || evt.key === `Esc`) {
+//       replaceFormToCard();
+//       document.removeEventListener(`keydown`, onEscPress);
+//     }
+//   };
 
-  taskComponent.setEditClickHandler(() => {
-    if (!taskEditComponent) {
-      taskEditComponent = new TaskEditView(task); // create component when click happen
-    }
-    replaceCardToForm();
-    document.addEventListener(`keydown`, onEscPress);
+//   taskComponent.setEditClickHandler(() => {
+//     if (!taskEditComponent) {
+//       taskEditComponent = new TaskEditView(task); // create component when click happen
+//     }
+//     replaceCardToForm();
+//     document.addEventListener(`keydown`, onEscPress);
 
-    taskEditComponent.setFormSubmitHandler(() => {
-      replaceFormToCard();
-    });
-  });
+//     taskEditComponent.setFormSubmitHandler(() => {
+//       replaceFormToCard();
+//     });
+//   });
 
-  render(taskListElement, taskComponent);
-};
+//   render(taskListElement, taskComponent);
+// };
 
-const renderBoard = (boardContainer, boardTasks) => {
-  const boardComponent = new BoardView();
-  const TaskListComponent = new TaskListView();
+// const renderBoard = (boardContainer, boardTasks) => {
+  // const boardComponent = new BoardView();
+  // const TaskListComponent = new TaskListView();
 
-  render(boardContainer, boardComponent);
-  render(boardComponent, TaskListComponent);
+  // render(boardContainer, boardComponent);
+  // render(boardComponent, TaskListComponent);
 
-  if (boardTasks.every((task) => task.isArchive)) {
-    render(boardComponent, new NoTasksView(), RenderPosition.AFTERBEGIN);
-    return;
-  }
+  // if (boardTasks.every((task) => task.isArchive)) {
+  //   render(boardComponent, new NoTasksView(), RenderPosition.AFTERBEGIN);
+  //   return;
+  // }
 
-  render(boardComponent, new SortingView(), RenderPosition.AFTERBEGIN);
+  // render(boardComponent, new SortingView(), RenderPosition.AFTERBEGIN);
 
-  boardTasks
-    .slice(0, Math.min(tasks.length, TASK_COUNT_PER_STEP))
-    .forEach((boardTask) => renderTask(TaskListComponent.getElement(), boardTask)); // ?
+  // boardTasks
+  //   .slice(0, Math.min(boardTasks.length, TASK_COUNT_PER_STEP))
+  //   .forEach((boardTask) => renderTask(TaskListComponent.getElement(), boardTask));
 
-  if (boardTasks.length > TASK_COUNT_PER_STEP) {
-    let renderedTaskCount = TASK_COUNT_PER_STEP;
+//   if (boardTasks.length > TASK_COUNT_PER_STEP) {
+//     let renderedTaskCount = TASK_COUNT_PER_STEP;
 
-    const LoadMoreButtonComponent = new LoadMoreButtonView();
+//     const LoadMoreButtonComponent = new LoadMoreButtonView();
 
-    render(boardComponent, LoadMoreButtonComponent);
+//     render(boardComponent, LoadMoreButtonComponent);
 
-    LoadMoreButtonComponent.setClickHandler(() => {
-      boardTasks
-        .slice(renderedTaskCount, renderedTaskCount + TASK_COUNT_PER_STEP)
-        .forEach((boardTask) => renderTask(TaskListComponent.getElement(), boardTask)); // ?
+//     LoadMoreButtonComponent.setClickHandler(() => {
+//       boardTasks
+//         .slice(renderedTaskCount, renderedTaskCount + TASK_COUNT_PER_STEP)
+//         .forEach((boardTask) => renderTask(TaskListComponent.getElement(), boardTask)); // ?
 
-      renderedTaskCount += TASK_COUNT_PER_STEP;
+//       renderedTaskCount += TASK_COUNT_PER_STEP;
 
-      if (renderedTaskCount >= boardTasks.length) {
-        remove(LoadMoreButtonComponent);
-      }
-    });
-  }
-};
+//       if (renderedTaskCount >= boardTasks.length) {
+//         remove(LoadMoreButtonComponent);
+//       }
+//     });
+//   }
+// };
 
 render(headerElement, new SiteMenuView());
 render(mainElement, new FilterView(filters));
