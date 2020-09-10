@@ -28,20 +28,6 @@ export default class Board {
     this._renderBoard();
   }
 
-  _renderBoard() {
-    if (this._boardTasks.every((task) => task.isArchive)) {
-      this._renderNoTasks();
-      return;
-    }
-
-    this._renderSorting();
-    this._renderTasks(0, Math.min(this._boardTasks.length, TASK_COUNT_PER_STEP));
-
-    if (this._boardTasks.length > TASK_COUNT_PER_STEP) {
-      this._renderLoadMoreButton();
-    }
-  }
-
   _renderTask(task) {
     const taskComponent = new TaskView(task);
     let taskEditComponent;
@@ -82,6 +68,14 @@ export default class Board {
     .forEach((boardTask) => this._renderTask(boardTask));
   }
 
+  _renderTaskList() {
+    this._renderTasks(0, Math.min(this._boardTasks.length, TASK_COUNT_PER_STEP));
+
+    if (this._boardTasks.length > TASK_COUNT_PER_STEP) {
+      this._renderLoadMoreButton();
+    }
+  }
+
   _renderNoTasks() {
     render(this._boardComponent, this._noTasksComponent, RenderPosition.AFTERBEGIN);
   }
@@ -108,5 +102,15 @@ export default class Board {
         remove(LoadMoreButtonComponent);
       }
     });
+  }
+
+  _renderBoard() {
+    if (this._boardTasks.every((task) => task.isArchive)) {
+      this._renderNoTasks();
+      return;
+    }
+
+    this._renderSorting();
+    this._renderTaskList();
   }
 }
