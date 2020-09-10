@@ -13,9 +13,9 @@ const headerElement = mainElement.querySelector(`.main__control`);
 const tasks = new Array(TASK_COUNT).fill().map(generateTask);
 const filters = generateFilter(tasks);
 
-const BoardInstance = new BoardPresenter(mainElement); // название компонента?
+const boardPresenter = new BoardPresenter(mainElement); // название компонента?
 
 render(headerElement, new SiteMenuView());
 render(mainElement, new FilterView(filters));
 
-BoardInstance.init(tasks);
+boardPresenter.init(tasks);
