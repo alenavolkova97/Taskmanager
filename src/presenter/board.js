@@ -92,10 +92,10 @@ export default class Board { // create components, add components into page, add
   _sortTasks(sortType) {
     switch (sortType) {
       case sortType.DATE_UP:
-        this._boardTasks.sort(sortTaskUp); // ?
+        this._boardTasks.sort(sortTaskUp);
         break;
       case sortType.DATE_DOWN:
-        this._boardTasks.sort(sortTaskDown); // ?
+        this._boardTasks.sort(sortTaskDown);
         break;
       default: // ?
         this._boardTasks = this._sourcedBoardTasks; // ? slice
