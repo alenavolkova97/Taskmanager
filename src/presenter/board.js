@@ -19,7 +19,6 @@ export default class Board { // create components, add components into page, add
 
     this._boardComponent = new BoardView();
     this._taskListComponent = new TaskListView();
-    this._noTasksComponent = new NoTasksView();
     this._sortingComponent = new SortingView();
     this._loadMoreButtonComponent = new LoadMoreButtonView();
 
@@ -91,6 +90,7 @@ export default class Board { // create components, add components into page, add
   }
 
   _renderNoTasks() {
+    this._noTasksComponent = new NoTasksView();
     render(this._boardComponent, this._noTasksComponent, RenderPosition.AFTERBEGIN);
   }
 
