@@ -7,7 +7,7 @@ import LoadMoreButtonView from '../view/load-more-button.js';
 import NoTasksView from '../view/no-tasks.js';
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {sortTaskUp, sortTaskDown} from "../utils/task.js";
-import {SortType} from '../const.js';
+import {SortType} from "../const.js";
 
 const TASK_COUNT_PER_STEP = 8;
 
@@ -28,11 +28,11 @@ export default class Board { // create components, add components into page, add
   }
 
   init(boardTasks) {
-    this._boardTasks = boardTasks; // ?
-    this._sourcedBoardTasks = this._boardTasks.slice();
+    this._boardTasks = boardTasks; // slice ?
+    this._sourcedBoardTasks = boardTasks.slice();
 
-    render(this._boardContainer, this._boardComponent);
-    render(this._boardComponent, this._taskListComponent);
+    render(this._boardContainer, this._boardComponent, RenderPosition.BEFOREEND);
+    render(this._boardComponent, this._taskListComponent, RenderPosition.BEFOREEND);
 
     this._renderBoard();
   }
@@ -85,20 +85,25 @@ export default class Board { // create components, add components into page, add
     }
   }
 
+  _clearTaskList() {
+    this._taskListComponent.getElement().innerHTML = ``;
+    this._renderedTaskCount = TASK_COUNT_PER_STEP;
+  }
+
   _renderNoTasks() {
     render(this._boardComponent, this._noTasksComponent, RenderPosition.AFTERBEGIN);
   }
 
   _sortTasks(sortType) {
     switch (sortType) {
-      case sortType.DATE_UP:
+      case SortType.DATE_UP:
         this._boardTasks.sort(sortTaskUp);
         break;
-      case sortType.DATE_DOWN:
+      case SortType.DATE_DOWN:
         this._boardTasks.sort(sortTaskDown);
         break;
-      default: // ?
-        this._boardTasks = this._sourcedBoardTasks; // ? slice
+      default:
+        this._boardTasks = this._sourcedBoardTasks; // slice ?
     }
 
     this._currentSortType = sortType;
@@ -110,8 +115,8 @@ export default class Board { // create components, add components into page, add
     }
 
     this._sortTasks(sortType);
-    // - Очищаем список
-    // - Рендерим список заново
+    this._clearTaskList();
+    this._renderTaskList();
   }
 
   _renderSorting() {
