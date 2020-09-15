@@ -38,8 +38,14 @@ export default class Board { // create components, add components into page, add
     this._renderBoard();
   }
 
+  _handleTaskChange(updatedTask) {
+    this._boardTasks = updateItem(this._boardTasks, updatedTask);
+    this._sourcedBoardTasks = updateItem(this._sourcedBoardTasks, updatedTask);
+    this._taskPresenters[updatedTask.id].init(updatedTask);
+  }
+
   _renderTask(task) {
-    const taskPresenter = new TaskPresenter(this._taskListComponent);
+    const taskPresenter = new TaskPresenter(this._taskListComponent, this._handleTaskChange);
     taskPresenter.init(task);
     this._taskPresenters[task.id] = taskPresenter;
   }
@@ -70,12 +76,6 @@ export default class Board { // create components, add components into page, add
   _renderNoTasks() {
     this._noTasksComponent = new NoTasksView();
     render(this._boardComponent, this._noTasksComponent, RenderPosition.AFTERBEGIN);
-  }
-
-  _handleTaskChange(updatedTask) {
-    this._boardTasks = updateItem(this._boardTasks, updatedTask);
-    this._sourcedBoardTasks = updateItem(this._sourcedBoardTasks, updatedTask);
-    this.TaskPresenters[updatedTask.id].init(updatedTask);
   }
 
   _sortTasks(sortType) {
