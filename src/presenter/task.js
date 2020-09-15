@@ -43,7 +43,6 @@ export default class Task {
 
   destroy() {
     remove(this._taskComponent);
-    remove(this._taskEditComponent);
   }
 
   _replaceCardToForm() {
