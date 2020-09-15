@@ -65,7 +65,6 @@ export default class Board { // create components, add components into page, add
   }
 
   _clearTaskList() {
-    this._taskListComponent.getElement().innerHTML = ``;
     Object
       .values(this._taskPresenters)
       .forEach((presenter) => presenter.destroy());

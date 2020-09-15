@@ -63,7 +63,12 @@ export const remove = (component) => {
     throw new Error(`Can remove only components`);
   }
 
-  component.getElement().remove(); // delete Dom-element
+  const el = component.getElement();
+
+  if (el) {
+    el.remove(); // delete Dom-element
+  }
+
   component.removeElement(); // set _element as null
 };
 

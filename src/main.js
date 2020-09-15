@@ -5,7 +5,7 @@ import {generateFilter} from "./mock/filter.js";
 import {render} from "./utils/render.js";
 import BoardPresenter from './presenter/board.js';
 
-const TASK_COUNT = 1; // !!!!!!!!!!!!!
+const TASK_COUNT = 22;
 
 const mainElement = document.querySelector(`main`);
 const headerElement = mainElement.querySelector(`.main__control`);
