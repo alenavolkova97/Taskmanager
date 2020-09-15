@@ -7,7 +7,7 @@ import {render, RenderPosition, remove} from "../utils/render.js";
 import {sortTaskUp, sortTaskDown} from "../utils/task.js";
 import {SortType} from "../const.js";
 import TaskPresenter from './task.js';
-import {updateItem} from '../utils/common.js';
+import {updateItem} from "../utils/common.js";
 
 const TASK_COUNT_PER_STEP = 8;
 

@@ -8,7 +8,7 @@ export default class Task {
     this._changeData = changeData;
 
     this._taskComponent = null;
-    this._taskEditComponent = null;
+    // this._taskEditComponent = null; // !!!!!!!!!!!!
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleEditClick = this._handleEditClick.bind(this);
@@ -29,21 +29,30 @@ export default class Task {
     this._taskComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._taskComponent.setArchiveClickHandler(this._handleArchiveClick);
 
+    console.log(prevTaskComponent);
+    console.log(prevTaskEditComponent);
+    console.log(this._taskComponent);
+    console.log(this._taskEditComponent);
     if (prevTaskComponent === null || prevTaskEditComponent === null) {
       render(this._taskListContainer, this._taskComponent);
+      console.log('new');
       return;
     }
+
+    console.log('replace');
 
     if (this._taskListContainer.getElement().contains(prevTaskComponent.getElement())) {
       replace(this._taskComponent, prevTaskComponent);
     }
 
-    if (this._taskListContainer.getElement().contains(prevTaskEditComponent.getElement())) {
+    if (prevTaskEditComponent && this._taskListContainer.getElement().contains(prevTaskEditComponent.getElement())) {
       replace(this._taskEditComponent, prevTaskEditComponent);
     }
 
     remove(prevTaskComponent);
-    remove(prevTaskEditComponent);
+    if (prevTaskEditComponent) { // !!!!!!!!!!!!
+      remove(prevTaskEditComponent);
+    }
   }
 
   destroy() {
@@ -56,12 +65,12 @@ export default class Task {
 
   _replaceFormToCard() {
     replace(this._taskComponent, this._taskEditComponent);
+    document.removeEventListener(`keydown`, this._escKeyDownHandler);
   }
 
   _escKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       this._replaceFormToCard();
-      document.removeEventListener(`keydown`, this._escKeyDownHandler);
     }
   }
 
