@@ -14,7 +14,9 @@ const BLANK_TASK = {
     sa: false,
     su: false
   },
-  color: COLORS[0]
+  color: COLORS[0],
+  isArchive: false,
+  isFavorite: false
 };
 
 export default class TaskEdit extends SmartView {
@@ -43,7 +45,7 @@ export default class TaskEdit extends SmartView {
           type="text"
           placeholder=""
           name="date"
-          value="${humanizeTaskDueDate(dueDate)}"
+          value="${dueDate !== null ? humanizeTaskDueDate(dueDate) : ``}"
         />
       </label>
     </fieldset>` : ``}`;
