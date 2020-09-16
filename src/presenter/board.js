@@ -26,6 +26,7 @@ export default class Board { // create components, add components into page, add
     this._handleTaskChange = this._handleTaskChange.bind(this);
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(boardTasks) {
@@ -44,8 +45,14 @@ export default class Board { // create components, add components into page, add
     this._taskPresenters[updatedTask.id].init(updatedTask);
   }
 
+  _handleModeChange() {
+    Object
+      .values(this._taskPresenters)
+      .forEach((presenter) => presenter.resetView());
+  }
+
   _renderTask(task) {
-    const taskPresenter = new TaskPresenter(this._taskListComponent, this._handleTaskChange);
+    const taskPresenter = new TaskPresenter(this._taskListComponent, this._handleTaskChange, this._handleModeChange);
     taskPresenter.init(task);
     this._taskPresenters[task.id] = taskPresenter;
   }

@@ -2,13 +2,19 @@ import TaskEditView from '../view/task-edit.js';
 import TaskView from '../view/task.js';
 import {render, replace, remove} from "../utils/render.js";
 
-export default class Task {
-  constructor(taskListContainer, changeData) {
-    this._currentState = null; // null | view | edit
-    this._currentTaskComponent = null; // null | new TaskView() | new TaskEditView()
+const Mode = {
+  DEFAULT: `default`,
+  EDITING: `editing`
+};
 
+export default class Task {
+  constructor(taskListContainer, changeData, changeMode) {
     this._taskListContainer = taskListContainer;
     this._changeData = changeData;
+    this._changeMode = changeMode;
+
+    this._currentMode = null; // null | Mode.DEFAULT | Mode.EDITING
+    this._currentTaskComponent = null; // null | new TaskView() | new TaskEditView()
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleEditClick = this._handleEditClick.bind(this);
@@ -17,10 +23,10 @@ export default class Task {
     this._handleArchiveClick = this._handleArchiveClick.bind(this);
   }
 
-  init(task, forceState = `view`) {
+  init(task, forceState = Mode.DEFAULT) {
     this._task = task || this._task;
 
-    if (this._currentState === null) {
+    if (this._currentMode === null) {
       this._currentTaskComponent = new TaskView(this._task);
 
       this._currentTaskComponent.setEditClickHandler(this._handleEditClick);
@@ -29,14 +35,14 @@ export default class Task {
 
       render(this._taskListContainer, this._currentTaskComponent);
 
-      this._currentState = `view`;
+      this._currentMode = Mode.DEFAULT;
 
       return;
     }
 
     const prevTaskComponent = this._currentTaskComponent;
 
-    if (forceState === `view`) {
+    if (forceState === Mode.DEFAULT) {
       this._currentTaskComponent = new TaskView(this._task);
 
       this._currentTaskComponent.setEditClickHandler(this._handleEditClick);
@@ -45,31 +51,39 @@ export default class Task {
 
       document.removeEventListener(`keydown`, this._escKeyDownHandler);
 
-    } else if (forceState === `edit`) {
+    } else if (forceState === Mode.EDITING) {
       this._currentTaskComponent = new TaskEditView(this._task);
 
       this._currentTaskComponent.setFormSubmitHandler(this._handleFormSubmit);
 
       document.addEventListener(`keydown`, this._escKeyDownHandler);
+
+      this._changeMode();
     }
 
     replace(this._currentTaskComponent, prevTaskComponent);
 
-    this._currentState = forceState;
+    this._currentMode = forceState;
   }
 
   destroy() {
     remove(this._currentTaskComponent);
   }
 
+  resetView() {
+    if (this._currentMode !== Mode.DEFAULT) {
+      this.init(null, Mode.DEFAULT);
+    }
+  }
+
   _escKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
-      this.init(null, `view`);
+      this.init(null, Mode.DEFAULT);
     }
   }
 
   _handleEditClick() {
-    this.init(null, `edit`);
+    this.init(null, Mode.EDITING);
   }
 
   _handleFavoriteClick() {
