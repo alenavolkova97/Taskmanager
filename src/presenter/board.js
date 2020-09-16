@@ -30,7 +30,7 @@ export default class Board { // create components, add components into page, add
 
   init(boardTasks) {
     this._boardTasks = boardTasks;
-    this._sourcedBoardTasks = boardTasks.slice();
+    this._sourcedBoardTasks = boardTasks.slice(); // slice ?
 
     render(this._boardContainer, this._boardComponent, RenderPosition.BEFOREEND);
     render(this._boardComponent, this._taskListComponent, RenderPosition.BEFOREEND);

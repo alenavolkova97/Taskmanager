@@ -44,6 +44,7 @@ export default class Task {
       this._currentTaskComponent.setArchiveClickHandler(this._handleArchiveClick);
 
       document.removeEventListener(`keydown`, this._escKeyDownHandler);
+
     } else if (forceState === `edit`) {
       this._currentTaskComponent = new TaskEditView(this._task);
 
