@@ -1,7 +1,6 @@
 import {COLORS} from '../const.js';
 import {isTaskExpired, isTaskRepeating, humanizeTaskDueDate} from '../utils/task.js';
-import AbstractView from './abstract.js';
-import {replace} from '../utils/render.js';
+import SmartView from './smart.js';
 
 const BLANK_TASK = {
   description: ``,
@@ -18,7 +17,7 @@ const BLANK_TASK = {
   color: COLORS[0]
 };
 
-export default class TaskEdit extends AbstractView {
+export default class TaskEdit extends SmartView {
   constructor(task = BLANK_TASK) {
     super();
     this._data = TaskEdit.parseTaskToData(task);
@@ -26,6 +25,8 @@ export default class TaskEdit extends AbstractView {
     this._dueDateToggleHandler = this._dueDateToggleHandler.bind(this);
     this._repeatingToggleHandler = this._repeatingToggleHandler.bind(this);
     this._descriptionInputHandler = this._descriptionInputHandler.bind(this);
+    this._repeatingChangeHandler = this._repeatingChangeHandler.bind(this);
+    this._colorChangeHandler = this._colorChangeHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -89,6 +90,10 @@ export default class TaskEdit extends AbstractView {
   getTemplate() {
     const {description, dueDate, repeating, color, isDueDate, isRepeating} = this._data;
 
+    const isSubmitDisabled = isRepeating && !isTaskRepeating(repeating);
+    // если isRepeating false, то isSubmitDisabled = false, хотя нужно true
+    // нужно будет блокировать для невыбранной даты - на данный момент дата не сохраняется
+
     return (
       `<article class="card card--edit card--${color} ${isTaskExpired(dueDate) ? `card--deadline` : ``}
         ${isRepeating ? `card--repeat` : ``}">
@@ -127,8 +132,10 @@ export default class TaskEdit extends AbstractView {
             </div>
 
             <div class="card__status-btns">
-              <button class="card__save" type="submit">save</button>
-              <button class="card__delete" type="button">cancel</button>
+              <button class="card__save" type="submit" ${isSubmitDisabled ? `disabled` : ``}>
+                save
+              </button>
+              <button class="card__delete" type="button">delete</button>
             </div>
           </div>
         </form>
@@ -136,37 +143,7 @@ export default class TaskEdit extends AbstractView {
     );
   }
 
-  updateData(update, isJustDataUpdating) {
-    if (!update) {
-      return;
-    }
-
-    this._data = Object.assign(
-        {},
-        this._data,
-        update
-    );
-
-    if (isJustDataUpdating) {
-      return;
-    }
-
-    this.updateElement();
-  }
-
-  updateElement() {
-    let prevElement = this.getElement();
-    this.removeElement();
-
-    const newElement = this.getElement();
-    replace(newElement, prevElement);
-
-    prevElement = null;
-
-    this._restoreHandlers();
-  }
-
-  _restoreHandlers() {
+  restoreHandlers() {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
   }
@@ -184,24 +161,53 @@ export default class TaskEdit extends AbstractView {
     .getElement()
     .querySelector(`.card__text`)
     .addEventListener(`input`, this._descriptionInputHandler);
+
+    if (this._data.isRepeating) {
+      this
+      .getElement()
+      .querySelector(`.card__repeat-days-inner`)
+      .addEventListener(`change`, this._repeatingChangeHandler);
+    }
+    this
+    .getElement()
+    .querySelector(`.card__colors-wrap`)
+    .addEventListener(`change`, this._colorChangeHandler);
   }
 
   _dueDateToggleHandler() {
     this.updateData({
-      isDueDate: !this._data.isDueDate
+      isDueDate: !this._data.isDueDate,
+      isRepeating: !this._data.isDueDate && false
     });
   }
 
   _repeatingToggleHandler() {
     this.updateData({
-      isRepeating: !this._data.isRepeating
+      isRepeating: !this._data.isRepeating,
+      isDueDate: !this._data.isRepeating && false
     });
   }
 
   _descriptionInputHandler(evt) {
-    this._updateData({
+    this.updateData({
       description: evt.target.value
     }, true);
+  }
+
+  _repeatingChangeHandler(evt) {
+    this.updateData({
+      repeating: Object.assign(
+          {},
+          this._data.repeating,
+          {[evt.target.value]: evt.target.checked}
+      )
+    });
+  }
+
+  _colorChangeHandler(evt) {
+    this.updateData({
+      color: evt.target.value
+    });
   }
 
   _formSubmitHandler(evt) {
