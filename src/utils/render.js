@@ -25,7 +25,7 @@ export const render = (container, child, place = RenderPosition.BEFOREEND) => {
   }
 };
 
-// export const renderTemplate = (container, template, place) => {
+// export const renderTemplate = (container, template, place = RenderPosition.BEFOREEND) => {
 //   if (container instanceof Abstract) {
 //     container = container.getElement();
 //   }
@@ -63,7 +63,12 @@ export const remove = (component) => {
     throw new Error(`Can remove only components`);
   }
 
-  component.getElement().remove(); // delete Dom-element
+  const element = component.getElement();
+
+  if (element) {
+    element.remove(); // delete Dom-element
+  }
+
   component.removeElement(); // set _element as null
 };
 

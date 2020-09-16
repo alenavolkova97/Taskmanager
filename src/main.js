@@ -13,7 +13,7 @@ const headerElement = mainElement.querySelector(`.main__control`);
 const tasks = new Array(TASK_COUNT).fill().map(generateTask);
 const filters = generateFilter(tasks);
 
-const boardPresenter = new BoardPresenter(mainElement); // название компонента?
+const boardPresenter = new BoardPresenter(mainElement);
 
 render(headerElement, new SiteMenuView());
 render(mainElement, new FilterView(filters));
