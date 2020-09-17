@@ -1,4 +1,4 @@
-import {isTaskExpired, isTaskRepeating, humanizeTaskDueDate} from '../utils/task.js';
+import {isTaskExpired, isTaskRepeating, formatTaskDueDate} from '../utils/task.js';
 import AbstractView from './abstract.js';
 
 export default class Task extends AbstractView {
@@ -50,7 +50,7 @@ export default class Task extends AbstractView {
                   <div class="card__date-deadline">
                     <p class="card__input-deadline-wrap">
                       <span class="card__date">
-                        ${(dueDate !== null) ? humanizeTaskDueDate(dueDate) : ``}
+                        ${formatTaskDueDate(dueDate)}
                       </span>
                     </p>
                   </div>
