@@ -18,10 +18,12 @@ export default class Board { // create components, add components into page, add
     this._currentSortType = SortType.DEFAULT;
     this._taskPresenters = {};
 
+    this._sortComponent = null;
+    this._loadMoreButtonComponent = null;
+    this._noTasksComponent = null;
+
     this._boardComponent = new BoardView();
     this._taskListComponent = new TaskListView();
-    this._sortingComponent = new SortingView();
-    this._loadMoreButtonComponent = new LoadMoreButtonView();
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -78,8 +80,12 @@ export default class Board { // create components, add components into page, add
         this._taskPresenters[data.id].init(data);
         break;
       case UpdateType.MINOR:
+        this._clearBoard();
+        this._renderBoard();
         break;
       case UpdateType.MAJOR:
+        this._clearBoard({resetRenderedTaskCount: true, resetSortType: true}); // ?
+        this._renderBoard();
         break;
     }
     // ОБНОВЛЯЕМ ПРЕДСТАВЛЕНИЕ
@@ -105,17 +111,6 @@ export default class Board { // create components, add components into page, add
     tasks.forEach((task) => this._renderTask(task));
   }
 
-  _renderTaskList() {
-    const taskCount = this._getTasks().length;
-    const tasks = this._getTasks().slice(0, Math.min(taskCount, TASK_COUNT_PER_STEP));
-
-    this._renderTasks(tasks);
-
-    if (taskCount > TASK_COUNT_PER_STEP) {
-      this._renderLoadMoreButton();
-    }
-  }
-
   _clearTaskList() {
     Object
       .values(this._taskPresenters)
@@ -135,13 +130,19 @@ export default class Board { // create components, add components into page, add
     }
 
     this._currentSortType = sortType;
-    this._clearTaskList();
-    this._renderTaskList();
+    this._clearBoard({resetRenderedTaskCount: true}); // ?
+    this._renderBoard();
   }
 
   _renderSorting() {
-    render(this._boardComponent, this._sortingComponent, RenderPosition.AFTERBEGIN);
+    if (this._sortingComponent !== null) {
+      this._sortingComponent = null;
+    }
+
+    this._sortingComponent = new SortingView();
     this._sortingComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+
+    render(this._boardComponent, this._sortingComponent, RenderPosition.AFTERBEGIN);
   }
 
   _handleLoadMoreButtonClick() {
@@ -158,18 +159,57 @@ export default class Board { // create components, add components into page, add
   }
 
   _renderLoadMoreButton() {
-    render(this._boardComponent, this._loadMoreButtonComponent);
+    if (this._loadMoreButtonComponent !== null) {
+      this._loadMoreButtonComponent = null;
+    }
 
+    this._loadMoreButtonComponent = new LoadMoreButtonView();
     this._loadMoreButtonComponent.setClickHandler(this._handleLoadMoreButtonClick);
+
+    render(this._boardComponent, this._loadMoreButtonComponent);
+  }
+
+  _clearBoard({resetRenderedTaskCount = false, resetSortType = false} = {}) { // ?
+    const taskCount = this._getTasks().length;
+
+    Object
+      .values(this._taskPresenters)
+      .forEach((presenter) => presenter.destroy());
+    this._taskPresenters = {};
+
+    remove(this._sortingComponent);
+    remove(this._noTasksComponent);
+    remove(this._loadMoreButtonComponent);
+
+    if (resetRenderedTaskCount) {
+      this._renderedTaskCount = TASK_COUNT_PER_STEP;
+    } else {
+      // На случай, если перерисовка доски вызвана
+      // уменьшением количества задач (например, удаление или перенос в архив)
+      // нужно скорректировать число показанных задач
+      this._renderedTaskCount = Math.min(taskCount, this._renderedTaskCount);
+    }
+
+    if (resetSortType) {
+      this._currentSortType = SortType.DEFAULT;
+    }
   }
 
   _renderBoard() {
-    if (this._getTasks().every((task) => task.isArchive)) {
+    const tasks = this._getTasks();
+    const taskCount = tasks.length;
+
+    if (taskCount === 0) {
       this._renderNoTasks();
       return;
     }
 
     this._renderSorting();
-    this._renderTaskList();
+
+    this._renderTasks(tasks.slice(0, Math.min(taskCount, this._renderedTaskCount)));
+
+    if (taskCount > this._renderedTaskCount) {
+      this._renderLoadMoreButton();
+    }
   }
 }

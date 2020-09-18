@@ -59,16 +59,15 @@ export const replace = (newChild, oldChild) => {
 };
 
 export const remove = (component) => {
+  if (component === null) {
+    return;
+  }
+
   if (!(component instanceof Abstract)) {
     throw new Error(`Can remove only components`);
   }
 
-  const element = component.getElement();
-
-  if (element) {
-    element.remove(); // delete Dom-element
-  }
-
+  component.getElement().remove(); // delete Dom-element
   component.removeElement(); // set _element as null
 };
 
