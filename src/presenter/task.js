@@ -2,6 +2,7 @@ import TaskEditView from '../view/task-edit.js';
 import TaskView from '../view/task.js';
 import {render, replace, remove} from "../utils/render.js";
 import {UserAction, UpdateType} from "../const.js";
+import {isTaskRepeating, isDatesEqual} from "../utils/task.js";
 
 const Mode = {
   DEFAULT: `default`,
@@ -20,6 +21,7 @@ export default class Task {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleArchiveClick = this._handleArchiveClick.bind(this);
   }
@@ -56,6 +58,7 @@ export default class Task {
       this._currentTaskComponent = new TaskEditView(this._task);
 
       this._currentTaskComponent.setFormSubmitHandler(this._handleFormSubmit);
+      this._currentTaskComponent.setDeleteClickHandler(this._handleDeleteClick);
 
       document.addEventListener(`keydown`, this._escKeyDownHandler);
 
@@ -115,11 +118,23 @@ export default class Task {
     );
   }
 
-  _handleFormSubmit(task) {
+  _handleFormSubmit(update) {
+    const isPatchUpdate =
+      isDatesEqual(this._task.dueDate, update.dueDate) &&
+      isTaskRepeating(this._task.repeating) === isTaskRepeating(update.repeating);
     this._changeData(
         UserAction.UPDATE_TASK,
+        isPatchUpdate ? UpdateType.PATCH : UpdateType.MINOR,
+        update
+    );
+    this.init(null, Mode.DEFAULT);
+  }
+
+  _handleDeleteClick(update) {
+    this._changeData(
+        UserAction.DELETE_TASK,
         UpdateType.MINOR,
-        task
+        update
     );
   }
 }
