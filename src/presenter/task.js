@@ -1,6 +1,7 @@
 import TaskEditView from '../view/task-edit.js';
 import TaskView from '../view/task.js';
 import {render, replace, remove} from "../utils/render.js";
+import {UserAction, UpdateType} from "../const.js";
 
 const Mode = {
   DEFAULT: `default`,
@@ -88,6 +89,8 @@ export default class Task {
 
   _handleFavoriteClick() {
     this._changeData(
+        UserAction.UPDATE_TASK,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._task,
@@ -100,6 +103,8 @@ export default class Task {
 
   _handleArchiveClick() {
     this._changeData(
+        UserAction.UPDATE_TASK,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._task,
@@ -111,6 +116,10 @@ export default class Task {
   }
 
   _handleFormSubmit(task) {
-    this._changeData(task);
+    this._changeData(
+        UserAction.UPDATE_TASK,
+        UpdateType.MINOR,
+        task
+    );
   }
 }
