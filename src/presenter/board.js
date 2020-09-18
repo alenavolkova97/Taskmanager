@@ -5,7 +5,7 @@ import LoadMoreButtonView from '../view/load-more-button.js';
 import NoTasksView from '../view/no-tasks.js';
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {sortTaskUp, sortTaskDown} from "../utils/task.js";
-import {SortType} from "../const.js";
+import {SortType, UpdateType, UserAction} from "../const.js";
 import TaskPresenter from './task.js';
 
 const TASK_COUNT_PER_STEP = 8;
@@ -55,7 +55,17 @@ export default class Board { // create components, add components into page, add
   // }
 
   _handleViewAction(actionType, updateType, update) {
-    console.log(actionType, updateType, update);
+    switch (actionType) {
+      case UserAction.UPDATE_TASK:
+        this._tasksModel.updateTask(updateType, update);
+        break;
+      case UserAction.ADD_TASK:
+        this._tasksModel.addTask(updateType, update);
+        break;
+      case UserAction.DELETE_TASK:
+        this._tasksModel.deleteTask(updateType, update);
+        break;
+    }
     // ОБНОВЛЯЕМ МОДЕЛЬ
     // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
     // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
@@ -63,7 +73,15 @@ export default class Board { // create components, add components into page, add
   }
 
   _handleModelEvent(updateType, data) {
-    console.log(updateType, data); // UPDATE TYPE решает
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this._taskPresenters[data.id].init(data);
+        break;
+      case UpdateType.MINOR:
+        break;
+      case UpdateType.MAJOR:
+        break;
+    }
     // ОБНОВЛЯЕМ ПРЕДСТАВЛЕНИЕ
     // В зависимости от типа изменений решаем, что делать:
     // - обновить часть списка (например, когда поменялось описание)
