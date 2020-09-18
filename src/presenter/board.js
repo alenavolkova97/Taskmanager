@@ -84,7 +84,7 @@ export default class Board { // create components, add components into page, add
         this._renderBoard();
         break;
       case UpdateType.MAJOR:
-        this._clearBoard({resetRenderedTaskCount: true, resetSortType: true}); // ?
+        this._clearBoard({resetRenderedTaskCount: true, resetSortType: true});
         this._renderBoard();
         break;
     }
@@ -111,13 +111,13 @@ export default class Board { // create components, add components into page, add
     tasks.forEach((task) => this._renderTask(task));
   }
 
-  _clearTaskList() {
-    Object
-      .values(this._taskPresenters)
-      .forEach((presenter) => presenter.destroy());
-    this._taskPresenters = {};
-    this._renderedTaskCount = TASK_COUNT_PER_STEP;
-  }
+  // _clearTaskList() {
+  //   Object
+  //     .values(this._taskPresenters)
+  //     .forEach((presenter) => presenter.destroy());
+  //   this._taskPresenters = {};
+  //   this._renderedTaskCount = TASK_COUNT_PER_STEP;
+  // }
 
   _renderNoTasks() {
     this._noTasksComponent = new NoTasksView();
@@ -130,7 +130,7 @@ export default class Board { // create components, add components into page, add
     }
 
     this._currentSortType = sortType;
-    this._clearBoard({resetRenderedTaskCount: true}); // ?
+    this._clearBoard({resetRenderedTaskCount: true});
     this._renderBoard();
   }
 
@@ -139,7 +139,7 @@ export default class Board { // create components, add components into page, add
       this._sortingComponent = null;
     }
 
-    this._sortingComponent = new SortingView();
+    this._sortingComponent = new SortingView(this._currentSortType);
     this._sortingComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
 
     render(this._boardComponent, this._sortingComponent, RenderPosition.AFTERBEGIN);
@@ -169,7 +169,7 @@ export default class Board { // create components, add components into page, add
     render(this._boardComponent, this._loadMoreButtonComponent);
   }
 
-  _clearBoard({resetRenderedTaskCount = false, resetSortType = false} = {}) { // ?
+  _clearBoard({resetRenderedTaskCount = false, resetSortType = false} = {}) {
     const taskCount = this._getTasks().length;
 
     Object
