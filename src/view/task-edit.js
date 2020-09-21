@@ -2,6 +2,7 @@ import {COLORS} from '../const.js';
 import {isTaskRepeating, formatTaskDueDate} from '../utils/task.js';
 import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
+import he from "he";
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
@@ -121,7 +122,7 @@ export default class TaskEdit extends SmartView {
                   class="card__text"
                   placeholder="Start typing your text here..."
                   name="text"
-                >${description}</textarea>
+                >${he.encode(description)}</textarea>
               </label>
             </div>
 
