@@ -5,8 +5,9 @@ import LoadMoreButtonView from '../view/load-more-button.js';
 import NoTasksView from '../view/no-tasks.js';
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {sortTaskUp, sortTaskDown} from "../utils/task.js";
-import {SortType, UpdateType, UserAction} from "../const.js";
+import {SortType, UpdateType, UserAction, FilterType} from "../const.js";
 import TaskPresenter from './task.js';
+import TaskNewPresenter from "./task-new.js";
 import {filter} from "../utils/filter.js";
 
 const TASK_COUNT_PER_STEP = 8;
@@ -35,6 +36,8 @@ export default class Board { // create components, add components into page, add
 
     this._tasksModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
+    this._taskNewPresenter = new TaskNewPresenter(this._taskListComponent, this._handleViewAction);
   }
 
   init() {
@@ -42,6 +45,12 @@ export default class Board { // create components, add components into page, add
     render(this._boardComponent, this._taskListComponent, RenderPosition.BEFOREEND);
 
     this._renderBoard();
+  }
+
+  createTask() {
+    this._currentSortType = SortType.DEFAULT;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
+    this._taskNewPresenter.init();
   }
 
   _getTasks() {
@@ -72,9 +81,6 @@ export default class Board { // create components, add components into page, add
         break;
     }
     // ОБНОВЛЯЕМ МОДЕЛЬ
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
   }
 
   _handleModelEvent(updateType, data) {
@@ -92,13 +98,10 @@ export default class Board { // create components, add components into page, add
         break;
     }
     // ОБНОВЛЯЕМ ПРЕДСТАВЛЕНИЕ
-    // В зависимости от типа изменений решаем, что делать:
-    // - обновить часть списка (например, когда поменялось описание)
-    // - обновить список (например, когда задача ушла в архив)
-    // - обновить всю доску (например, при переключении фильтра)
   }
 
   _handleModeChange() {
+    this._taskNewPresenter.destroy();
     Object
       .values(this._taskPresenters)
       .forEach((presenter) => presenter.resetView());
@@ -113,14 +116,6 @@ export default class Board { // create components, add components into page, add
   _renderTasks(tasks) {
     tasks.forEach((task) => this._renderTask(task));
   }
-
-  // _clearTaskList() {
-  //   Object
-  //     .values(this._taskPresenters)
-  //     .forEach((presenter) => presenter.destroy());
-  //   this._taskPresenters = {};
-  //   this._renderedTaskCount = TASK_COUNT_PER_STEP;
-  // }
 
   _renderNoTasks() {
     this._noTasksComponent = new NoTasksView();
@@ -175,6 +170,7 @@ export default class Board { // create components, add components into page, add
   _clearBoard({resetRenderedTaskCount = false, resetSortType = false} = {}) {
     const taskCount = this._getTasks().length;
 
+    this._taskNewPresenter.destroy();
     Object
       .values(this._taskPresenters)
       .forEach((presenter) => presenter.destroy());

@@ -25,3 +25,7 @@ render(headerElement, new SiteMenuView());
 
 filterPresenter.init();
 boardPresenter.init();
+
+document.querySelector(`.control__label--new-task`).addEventListener(`click`, () => {
+  boardPresenter.createTask();
+});
