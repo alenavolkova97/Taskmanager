@@ -7,12 +7,14 @@ import {render, RenderPosition, remove} from "../utils/render.js";
 import {sortTaskUp, sortTaskDown} from "../utils/task.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
 import TaskPresenter from './task.js';
+import {filter} from "../utils/filter.js";
 
 const TASK_COUNT_PER_STEP = 8;
 
 export default class Board { // create components, add components into page, add event listeners
-  constructor(boardContainer, tasksModel) {
+  constructor(boardContainer, tasksModel, filterModel) {
     this._tasksModel = tasksModel;
+    this._filterModel = filterModel;
     this._boardContainer = boardContainer;
     this._renderedTaskCount = TASK_COUNT_PER_STEP;
     this._currentSortType = SortType.DEFAULT;
@@ -32,6 +34,7 @@ export default class Board { // create components, add components into page, add
     this._handleModeChange = this._handleModeChange.bind(this);
 
     this._tasksModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -42,19 +45,19 @@ export default class Board { // create components, add components into page, add
   }
 
   _getTasks() {
+    const filterType = this._filterModel.getFilter();
+    const tasks = this._tasksModel.getTasks();
+    const filtredTasks = filter[filterType](tasks);
+
     switch (this._currentSortType) {
       case SortType.DATE_UP:
-        return this._tasksModel.getTasks().slice().sort(sortTaskUp);
+        return filtredTasks.sort(sortTaskUp);
       case SortType.DATE_DOWN:
-        return this._tasksModel.getTasks().slice().sort(sortTaskDown);
+        return filtredTasks.sort(sortTaskDown);
     }
 
-    return this._tasksModel.getTasks();
+    return filtredTasks;
   }
-
-  // _handleTaskChange(updatedTask) { УДАЛИТЬ
-  //   this._taskPresenters[updatedTask.id].init(updatedTask);
-  // }
 
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {

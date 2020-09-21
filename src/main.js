@@ -1,8 +1,8 @@
 import SiteMenuView from './view/site-menu.js';
-import FilterView from './view/filter.js';
 import {generateTask} from './mock/task.js';
 import {render} from "./utils/render.js";
 import BoardPresenter from './presenter/board.js';
+import FilterPresenter from "./presenter/filter.js";
 import TasksModel from './model/tasks.js';
 import FilterModel from './model/filter.js';
 
@@ -12,22 +12,16 @@ const mainElement = document.querySelector(`main`);
 const headerElement = mainElement.querySelector(`.main__control`);
 
 const tasks = new Array(TASK_COUNT).fill().map(generateTask);
-const filters = [
-  {
-    type: `all`,
-    name: `ALL`,
-    count: 0
-  }
-];
 
 const tasksModel = new TasksModel();
 tasksModel.setTasks(tasks);
 
 const filterModel = new FilterModel();
 
-const boardPresenter = new BoardPresenter(mainElement, tasksModel);
+const boardPresenter = new BoardPresenter(mainElement, tasksModel, filterModel);
+const filterPresenter = new FilterPresenter(mainElement, filterModel, tasksModel);
 
 render(headerElement, new SiteMenuView());
-render(mainElement, new FilterView(filters, `all`));
 
+filterPresenter.init();
 boardPresenter.init();
