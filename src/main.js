@@ -5,6 +5,7 @@ import {generateFilter} from "./mock/filter.js";
 import {render} from "./utils/render.js";
 import BoardPresenter from './presenter/board.js';
 import TasksModel from './model/tasks.js';
+import FilterModel from './model/filter.js';
 
 const TASK_COUNT = 22;
 
@@ -16,6 +17,8 @@ const filters = generateFilter(tasks);
 
 const tasksModel = new TasksModel();
 tasksModel.setTasks(tasks);
+
+const filterModel = new FilterModel();
 
 const boardPresenter = new BoardPresenter(mainElement, tasksModel);
 
