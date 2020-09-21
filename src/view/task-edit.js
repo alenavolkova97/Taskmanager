@@ -103,7 +103,6 @@ export default class TaskEdit extends SmartView {
 
     const isSubmitDisabled = (isDueDate && dueDate === null)
       || (isRepeating && !isTaskRepeating(repeating));
-    // на данный момент дата не сохраняется
 
     return (
       `<article class="card card--edit card--${color}
