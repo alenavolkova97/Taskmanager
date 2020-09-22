@@ -1,7 +1,7 @@
 import SiteMenuView from './view/site-menu.js';
 import StatisticsView from "./view/statistics.js";
 import {generateTask} from './mock/task.js';
-import {render} from "./utils/render.js";
+import {render, remove} from "./utils/render.js";
 import BoardPresenter from './presenter/board.js';
 import FilterPresenter from "./presenter/filter.js";
 import TasksModel from './model/tasks.js';
@@ -31,9 +31,12 @@ const handleTaskNewFormClose = () => {
   menuComponent.setMenuItem(MenuItem.TASKS);
 };
 
+let statisticsComponent = null;
+
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_TASK:
+      remove(statisticsComponent);
       boardPresenter.destroy();
       filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
       boardPresenter.init();
@@ -42,9 +45,12 @@ const handleSiteMenuClick = (menuItem) => {
       break;
     case MenuItem.TASKS:
       boardPresenter.init();
+      remove(statisticsComponent);
       break;
     case MenuItem.STATISTICS:
       boardPresenter.destroy();
+      statisticsComponent = new StatisticsView(tasksModel.getTasks());
+      render(mainElement, statisticsComponent);
       break;
   }
 };
@@ -53,4 +59,3 @@ menuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 filterPresenter.init();
 boardPresenter.init();
-render(mainElement, new StatisticsView(tasksModel.getTasks()));
