@@ -1,13 +1,14 @@
 import SiteMenuView from './view/site-menu.js';
-import StatisticsView from "./view/statistics.js";
+import StatisticsView from './view/statistics.js';
 import {generateTask} from './mock/task.js';
-import {render, remove} from "./utils/render.js";
+import {render, remove} from './utils/render.js';
 import BoardPresenter from './presenter/board.js';
-import FilterPresenter from "./presenter/filter.js";
+import FilterPresenter from './presenter/filter.js';
 import TasksModel from './model/tasks.js';
 import FilterModel from './model/filter.js';
-import {MenuItem, UpdateType, FilterType} from "./const.js";
-import Api from "./api.js";
+import TasksModel from './model/tasks.js';
+import {MenuItem, UpdateType, FilterType} from './const.js';
+import Api from './api.js';
 
 const TASK_COUNT = 22;
 const AUTHORIZATION = `Basic hS2sd3dfSwcl1sa2j`;
