@@ -7,14 +7,22 @@ import FilterPresenter from "./presenter/filter.js";
 import TasksModel from './model/tasks.js';
 import FilterModel from './model/filter.js';
 import {MenuItem, UpdateType, FilterType} from "./const.js";
+import Api from "./api.js";
 
 const TASK_COUNT = 22;
+const AUTHORIZATION = `Basic hS2sd3dfSwcl1sa2j`;
+const END_POINT = `https://12.ecmascript.pages.academy/task-manager`;
 
 const mainElement = document.querySelector(`main`);
 const headerElement = mainElement.querySelector(`.main__control`);
 const menuComponent = new SiteMenuView();
 
 const tasks = new Array(TASK_COUNT).fill().map(generateTask);
+const api = new Api(END_POINT, AUTHORIZATION);
+
+api.getTasks().then((tasks) => {
+  console.log(tasks);
+});
 
 const tasksModel = new TasksModel();
 tasksModel.setTasks(tasks);
