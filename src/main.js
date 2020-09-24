@@ -52,12 +52,17 @@ const handleSiteMenuClick = (menuItem) => {
   }
 };
 
-menuComponent.setMenuClickHandler(handleSiteMenuClick);
-render(headerElement, menuComponent);
-
 filterPresenter.init();
 boardPresenter.init();
 
-api.getTasks().then((tasks) => {
-  tasksModel.setTasks(tasks);
-});
+api.getTasks()
+  .then((tasks) => {
+    tasksModel.setTasks(UpdateType.INIT, tasks);
+    menuComponent.setMenuClickHandler(handleSiteMenuClick);
+    render(headerElement, menuComponent);
+  })
+  .catch(() => {
+    tasksModel.setTasks(UpdateType.INIT, []);
+    menuComponent.setMenuClickHandler(handleSiteMenuClick);
+    render(headerElement, menuComponent);
+  });
