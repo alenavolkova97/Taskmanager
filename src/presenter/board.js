@@ -7,7 +7,7 @@ import LoadingView from "../view/loading.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {sortTaskUp, sortTaskDown} from "../utils/task.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
-import TaskPresenter from './task.js';
+import TaskPresenter, {State as TaskPresenterViewState} from './task.js';
 import TaskNewPresenter from "./task-new.js";
 import {filter} from "../utils/filter.js";
 
@@ -83,16 +83,19 @@ export default class Board { // create components, add components into page, add
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_TASK:
+        this._taskPresenters[update.id].setViewState(TaskPresenterViewState.SAVING);
         this._api.updateTask(update).then((response) => {
           this._tasksModel.updateTask(updateType, response);
         });
         break;
       case UserAction.ADD_TASK:
+        this._taskNewPresenter.setSaving();
         this._api.addTask(update).then((response) => {
           this._tasksModel.addTask(updateType, response);
         });
         break;
       case UserAction.DELETE_TASK:
+        this._taskPresenters[update.id].setViewState(TaskPresenterViewState.DELETING);
         this._api.deleteTask(update).then(() => {
           this._tasksModel.deleteTask(updateType, update);
         });

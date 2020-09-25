@@ -9,6 +9,11 @@ const Mode = {
   EDITING: `editing`
 };
 
+export const State = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`
+};
+
 export default class Task {
   constructor(taskListContainer, changeData, changeMode) {
     this._taskListContainer = taskListContainer;
@@ -80,6 +85,23 @@ export default class Task {
     }
   }
 
+  setViewState(state) {
+    switch (state) {
+      case State.SAVING:
+        this._currentTaskComponent.updateData({
+          isDisabled: true,
+          isSaving: true
+        });
+        break;
+      case State.DELETING:
+        this._currentTaskComponent.updateData({
+          isDisabled: true,
+          isDeleting: true
+        });
+        break;
+    }
+  }
+
   _escKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       this.init(null, Mode.DEFAULT);
@@ -127,7 +149,7 @@ export default class Task {
         isPatchUpdate ? UpdateType.PATCH : UpdateType.MINOR,
         update
     );
-    this.init(null, Mode.DEFAULT);
+    // this.init(null, Mode.DEFAULT);
   }
 
   _handleDeleteClick(update) {
