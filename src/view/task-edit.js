@@ -42,7 +42,7 @@ export default class TaskEdit extends SmartView {
     this._setDatepicker();
   }
 
-  _createTaskEditDateTemplate(dueDate, isDueDate) {
+  _createTaskEditDateTemplate(dueDate, isDueDate, isDisabled) {
     return `<button class="card__date-deadline-toggle" type="button">
       date: <span class="card__date-status">${isDueDate ? `yes` : `no`}</span>
     </button>
@@ -55,12 +55,13 @@ export default class TaskEdit extends SmartView {
           placeholder=""
           name="date"
           value="${formatTaskDueDate(dueDate)}"
+          ${isDisabled ? `disabled` : ``}
         />
       </label>
     </fieldset>` : ``}`;
   }
 
-  _createTaskEditRepeatingTemplate(repeating, isRepeating) {
+  _createTaskEditRepeatingTemplate(repeating, isRepeating, isDisabled) {
     return `<button class="card__repeat-toggle" type="button">
       repeat:<span class="card__repeat-status">${isRepeating ? `yes` : `no`}</span>
     </button>
@@ -74,6 +75,7 @@ export default class TaskEdit extends SmartView {
           name="repeat"
           value="${day}"
           ${repeat ? `checked` : ``}
+          ${isDisabled ? `checked` : ``}
         />
         <label class="card__repeat-day" for="repeat-${day}-1"
           >${day}</label
@@ -99,7 +101,8 @@ export default class TaskEdit extends SmartView {
   }
 
   getTemplate() {
-    const {description, dueDate, repeating, color, isDueDate, isRepeating} = this._data;
+    const {description, dueDate, repeating, color, isDueDate, isRepeating,
+      isDisabled, isSaving, isDeleting} = this._data;
 
     const isSubmitDisabled = (isDueDate && dueDate === null)
       || (isRepeating && !isTaskRepeating(repeating));
@@ -121,6 +124,7 @@ export default class TaskEdit extends SmartView {
                   class="card__text"
                   placeholder="Start typing your text here..."
                   name="text"
+                  ${isDisabled ? `disabled` : ``}
                 >${he.encode(description)}</textarea>
               </label>
             </div>
@@ -128,8 +132,8 @@ export default class TaskEdit extends SmartView {
             <div class="card__settings">
               <div class="card__details">
                 <div class="card__dates">
-                  ${this._createTaskEditDateTemplate(dueDate, isDueDate)}
-                  ${this._createTaskEditRepeatingTemplate(repeating, isRepeating)}
+                  ${this._createTaskEditDateTemplate(dueDate, isDueDate, isDisabled)}
+                  ${this._createTaskEditRepeatingTemplate(repeating, isRepeating, isDisabled)}
                 </div>
               </div>
 
@@ -142,10 +146,12 @@ export default class TaskEdit extends SmartView {
             </div>
 
             <div class="card__status-btns">
-              <button class="card__save" type="submit" ${isSubmitDisabled ? `disabled` : ``}>
-                save
+              <button class="card__save" type="submit" ${isSubmitDisabled || isDisabled ? `disabled` : ``}>
+                ${isSaving ? `saving...` : `save`}
               </button>
-              <button class="card__delete" type="button">delete</button>
+              <button class="card__delete" type="button" ${isDisabled ? `disabled` : ``}>
+                ${isDeleting ? `deleting...` : `delete`}
+              </button>
             </div>
           </div>
         </form>
@@ -283,7 +289,10 @@ export default class TaskEdit extends SmartView {
         task,
         {
           isDueDate: Boolean(task.dueDate),
-          isRepeating: isTaskRepeating(task.repeating)
+          isRepeating: isTaskRepeating(task.repeating),
+          isDisabled: false,
+          isSaving: false,
+          isDeleting: false
         }
     );
   }
@@ -309,6 +318,9 @@ export default class TaskEdit extends SmartView {
 
     delete data.isDueDate;
     delete data.isRepeating;
+    delete data.isDisabled;
+    delete data.isSaving;
+    delete data.isDeleting;
 
     return data;
   }
