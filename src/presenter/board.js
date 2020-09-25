@@ -14,7 +14,7 @@ import {filter} from "../utils/filter.js";
 const TASK_COUNT_PER_STEP = 8;
 
 export default class Board { // create components, add components into page, add event listeners
-  constructor(boardContainer, tasksModel, filterModel) {
+  constructor(boardContainer, tasksModel, filterModel, api) {
     this._tasksModel = tasksModel;
     this._filterModel = filterModel;
     this._boardContainer = boardContainer;
@@ -22,6 +22,7 @@ export default class Board { // create components, add components into page, add
     this._currentSortType = SortType.DEFAULT;
     this._taskPresenters = {};
     this._isLoading = true;
+    this._api = api;
 
     this._sortComponent = null;
     this._loadMoreButtonComponent = null;
@@ -82,7 +83,9 @@ export default class Board { // create components, add components into page, add
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_TASK:
-        this._tasksModel.updateTask(updateType, update);
+        this._api.updateTask(update).then((response) => {
+          this._tasksModel.updateTask(updateType, response);
+        });
         break;
       case UserAction.ADD_TASK:
         this._tasksModel.addTask(updateType, update);
