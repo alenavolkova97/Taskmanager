@@ -300,21 +300,21 @@ export default class TaskEdit extends SmartView {
   static parseDataToTask(data) {
     data = Object.assign({}, data);
 
-    // if (!data.isDueDate) { // зачем нужны ?
-    //   data.dueDate = null;
-    // }
+    if (!data.isDueDate) {
+      data.dueDate = null;
+    }
 
-    // if (!data.isRepeating) {
-    //   data.repeating = {
-    //     mo: false,
-    //     tu: false,
-    //     we: false,
-    //     th: false,
-    //     fr: false,
-    //     sa: false,
-    //     su: false
-    //   };
-    // }
+    if (!data.isRepeating) {
+      data.repeating = {
+        mo: false,
+        tu: false,
+        we: false,
+        th: false,
+        fr: false,
+        sa: false,
+        su: false
+      };
+    }
 
     delete data.isDueDate;
     delete data.isRepeating;

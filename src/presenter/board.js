@@ -93,6 +93,7 @@ export default class Board { // create components, add components into page, add
           });
         break;
       case UserAction.ADD_TASK:
+        console.log( this._taskNewPresenter);
         this._taskNewPresenter.setSaving();
         this._api.addTask(update)
         .then((response) => {
