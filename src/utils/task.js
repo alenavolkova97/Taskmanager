@@ -4,7 +4,7 @@ export const getCurrentDate = () => {
   const currentDate = new Date();
   currentDate.setHours(23, 59, 59, 999);
 
-  return currentDate;
+  return new Date(currentDate);
 };
 
 export const isTaskExpired = (dueDate) => {
@@ -28,7 +28,7 @@ export const isTaskExpiringToday = (dueDate) => {
 };
 
 export const isTaskRepeating = (repeating) => {
-  return Object.values(repeating).some((repeat) => repeat);
+  return Object.values(repeating).some(Boolean);
 };
 
 export const formatTaskDueDate = (dueDate) => {
@@ -45,31 +45,31 @@ const getWeightForNullDate = (dateA, dateB) => {
   }
 
   if (dateA === null) {
-    return 1; // ?
+    return 1;
   }
 
   if (dateB === null) {
-    return -1; // ?
+    return -1;
   }
 
   return null;
 };
 
 export const sortTaskUp = (taskA, taskB) => {
-  const weigth = getWeightForNullDate(taskA.dueDate, taskB.dueDate);
+  const weight = getWeightForNullDate(taskA.dueDate, taskB.dueDate);
 
-  if (weigth !== null) {
-    return weigth;
+  if (weight !== null) {
+    return weight;
   }
 
   return taskA.dueDate.getTime() - taskB.dueDate.getTime();
 };
 
 export const sortTaskDown = (taskA, taskB) => {
-  const weigth = getWeightForNullDate(taskA.dueDate, taskB.dueDate);
+  const weight = getWeightForNullDate(taskA.dueDate, taskB.dueDate);
 
-  if (weigth !== null) {
-    return weigth;
+  if (weight !== null) {
+    return weight;
   }
 
   return taskB.dueDate.getTime() - taskA.dueDate.getTime();

@@ -8,7 +8,7 @@ import FilterModel from './model/filter.js';
 import {MenuItem, UpdateType, FilterType} from './const.js';
 import Api from './api.js';
 
-const AUTHORIZATION = `Basic hS2sd3dfSwcl1Aa2A`;
+const AUTHORIZATION = `Basic hS2sd3dfSwcl1Aa07`;
 const END_POINT = `https://12.ecmascript.pages.academy/task-manager`;
 
 const mainElement = document.querySelector(`main`);
@@ -58,11 +58,11 @@ boardPresenter.init();
 api.getTasks()
   .then((tasks) => {
     tasksModel.setTasks(UpdateType.INIT, tasks);
-    menuComponent.setMenuClickHandler(handleSiteMenuClick);
     render(headerElement, menuComponent);
+    menuComponent.setMenuClickHandler(handleSiteMenuClick);
   })
   .catch(() => {
     tasksModel.setTasks(UpdateType.INIT, []);
-    menuComponent.setMenuClickHandler(handleSiteMenuClick);
     render(headerElement, menuComponent);
+    menuComponent.setMenuClickHandler(handleSiteMenuClick);
   });

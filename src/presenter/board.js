@@ -93,7 +93,6 @@ export default class Board { // create components, add components into page, add
           });
         break;
       case UserAction.ADD_TASK:
-        console.log( this._taskNewPresenter);
         this._taskNewPresenter.setSaving();
         this._api.addTask(update)
         .then((response) => {
@@ -114,7 +113,6 @@ export default class Board { // create components, add components into page, add
         });
         break;
     }
-    // ОБНОВЛЯЕМ МОДЕЛЬ
   }
 
   _handleModelEvent(updateType, data) {
@@ -136,7 +134,6 @@ export default class Board { // create components, add components into page, add
         this._renderBoard();
         break;
     }
-    // ОБНОВЛЯЕМ ПРЕДСТАВЛЕНИЕ
   }
 
   _handleModeChange() {
@@ -192,7 +189,7 @@ export default class Board { // create components, add components into page, add
     const tasks = this._getTasks().slice(this._renderedTaskCount, newRenderedTaskCount);
 
     this._renderTasks(tasks);
-    this._renderedTaskCount += newRenderedTaskCount;
+    this._renderedTaskCount = newRenderedTaskCount;
 
     if (this._renderedTaskCount >= taskCount) {
       remove(this._loadMoreButtonComponent);

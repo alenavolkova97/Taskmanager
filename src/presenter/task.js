@@ -116,6 +116,7 @@ export default class Task {
 
   _escKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
       this.init(null, Mode.DEFAULT);
     }
   }
@@ -161,7 +162,6 @@ export default class Task {
         isPatchUpdate ? UpdateType.PATCH : UpdateType.MINOR,
         update
     );
-    // this.init(null, Mode.DEFAULT);
   }
 
   _handleDeleteClick(update) {

@@ -71,6 +71,7 @@ export default class TaskNew {
         UpdateType.MINOR,
         task
     );
+    this.destroy();
   }
 
   _handleDeleteClick() {
@@ -79,6 +80,7 @@ export default class TaskNew {
 
   _escKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
       this.destroy();
     }
   }

@@ -1,8 +1,8 @@
 import {isTaskExpired, isTaskRepeating, formatTaskDueDate} from '../utils/task.js';
-import AbstractView from './abstract.js';
+import SmartView from './smart.js';
 import he from "he";
 
-export default class Task extends AbstractView {
+export default class Task extends SmartView {
   constructor(task) {
     super();
     this._task = task;
@@ -10,6 +10,8 @@ export default class Task extends AbstractView {
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._archiveClickHandler = this._archiveClickHandler.bind(this);
   }
+
+  restoreHandlers() {}
 
   getTemplate() {
     const {description, color, dueDate, repeating, isArchive, isFavorite} = this._task;

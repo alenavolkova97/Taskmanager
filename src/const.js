@@ -37,7 +37,7 @@ export const FilterType = {
 };
 
 export const MenuItem = {
-  ADD_NEW_TASK: `addNewTask`,
-  TASKS: `tasks`,
-  STATISTICS: `statistics`
+  ADD_NEW_TASK: `ADD_NEW_TASK`,
+  TASKS: `TASKS`,
+  STATISTICS: `STATISTICS`
 };
